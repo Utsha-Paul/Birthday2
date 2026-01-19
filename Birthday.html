@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Birthday Magic 🐼</title>
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: #ffdae0;
+            background-image: radial-gradient(#ffffff 20%, transparent 20%), radial-gradient(#ffffff 20%, transparent 20%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .container {
+            background: white;
+            padding: 30px 15px;
+            border-radius: 35px;
+            border: 8px solid #ff4d6d;
+            box-shadow: 0 8px 0 #c9184a;
+            width: 90%; /* Responsive width for mobile */
+            max-width: 350px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { color: #ff4d6d; font-size: 2rem; margin: 0 0 10px 0; }
+        .press-me-text { font-size: 1.1rem; color: #666; margin-bottom: 15px; }
+
+        .magic-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            width: 100%; /* Full width on mobile */
+            padding: 18px;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px #c9184a;
+            font-weight: bold;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .magic-btn:active { transform: translateY(4px); box-shadow: 0 2px #c9184a; }
+
+        #hourly-box {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #d00000;
+            background: #fff0f3;
+            padding: 15px;
+            border-radius: 20px;
+            border: 2px dashed #ff4d6d;
+            display: none;
+        }
+
+        /* Animated Emojis */
+        .emoji-sticker {
+            position: absolute;
+            font-size: 50px;
+            animation: float 4s infinite ease-in-out;
+            z-index: 1;
+            user-select: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Midnight Pop-up Overlay */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 182, 193, 0.98); 
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal {
+            background: white; border: 6px solid #ff4d6d;
+            padding: 25px; border-radius: 35px; width: 100%;
+            max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .choice-btn {
+            padding: 15px; border-radius: 25px; border: none;
+            font-weight: bold; cursor: pointer; font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="emoji-sticker" style="top: 5%; left: 10%;">🐱</div>
+    <div class="emoji-sticker" style="top: 12%; right: 10%; animation-delay: 1s;">🐭</div>
+    <div class="emoji-sticker" style="bottom: 15%; left: 8%; animation-delay: 2s;">🐼</div>
+    <div class="emoji-sticker" style="bottom: 8%; right: 12%; animation-delay: 3s;">🍕</div>
+    <div class="emoji-sticker" style="top: 40%; right: 5%; font-size: 30px;">✨</div>
+
+    <div class="container">
+        <h1>Hi Sushu! 🌸</h1>
+        <p class="press-me-text">Press the big button! 🐼👇</p>
+        <button class="magic-btn" onclick="showMsg()">PRESS ME! ✨</button>
+        <div id="hourly-box"></div>
+    </div>
+
+    <div id="overlay">
+        <div class="modal">
+            <div style="font-size: 70px;">🦉</div>
+            <h2 style="color:#ff4d6d">Hoo-Hoo!</h2>
+            <p id="owl-speech" style="font-size: 1.05rem; line-height: 1.4;">Are you still angry with me, hooman? <br> (Your Owl misses his Panda!)</p>
+            <div id="btn-group" class="btn-row">
+                <button class="choice-btn" style="background: #ff7096; color: white;" onclick="answer('yes')">Yes, Hmph! 😤</button>
+                <button class="choice-btn" style="background: #70e000; color: white;" onclick="answer('no')">No, I'm not! 😊</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMsg() {
+            const box = document.getElementById('hourly-box');
+            const hour = new Date().getHours();
+            box.style.display = 'block';
+
+            const msgs = [
+                "Good morning Panda! Today is the start of your birthday eve! ☀️",
+                "Checking in... yup, you're still the cutest Panda ever! 🐼",
+                "Owl is sending a little 'I'm sorry' hug through the screen... 🦉",
+                "Did someone say Pizza? Oh wait, that's later! 🍕",
+                "Sushu + Cake = The best combination today! 🎂",
+                "Almost midnight! Get ready for the big Hoo-Hoo! 🎈",
+                "No matter what, you're my favorite human. ✨"
+            ];
+
+            // If it's Jan 19th, show these. If it's Jan 20th, show B-day text.
+            if (hour >= 7) {
+                box.innerText = msgs[(hour - 7) % msgs.length];
+            } else {
+                box.innerText = "It's early! Wait for 7am! 😴";
+            }
+        }
+
+        function checkTime() {
+            const now = new Date();
+            // Activates automatically at 12 AM on Jan 20th
+            if (now.getMonth() === 0 && now.getDate() >= 20) {
+                document.getElementById('overlay').style.display = 'flex';
+            }
+        }
+        setInterval(checkTime, 5000);
+        checkTime();
+
+        function answer(val) {
+            const speech = document.getElementById('owl-speech');
+            const btns = document.getElementById('btn-group');
+            
+            if (val === 'yes') {
+                speech.innerHTML = "😔 *Sad Owl Noises* <br><br>Hoo-Hoo! Happy Birthday, Sushu! I know I'm a silly owl, but I care about you the most. Even if we fight, you’re stuck with me. I'll wait for you to be ready... Happy Birthday, maa! 🎈🎁";
+            } else {
+                speech.innerHTML = "🥳 *Happy Owl Flaps!* <br><br>Hoo-Hoo! 🦉 Happy Birthday, Sushu! I'm so glad we're okay. You're my favorite Panda forever! Eat lots of cake and get ready for PIZZA soon! 🍕😂 Happy Birthday, maa! 🎈🎁";
+            }
+            btns.innerHTML = '<button class="choice-btn" style="background:#ff4d6d; color:white;" onclick="document.getElementById(\'overlay\').style.display=\'none\'">❤️ Open Birthday Site</button>';
+        }
+    </script>
+</body>
+</html>
